@@ -1,20 +1,16 @@
 let container = document.querySelector("#mainContainer");
 let size = document.getElementById('inputSize');
 let startBtn = document.querySelector("#startButton");
+let restartBtn = document.querySelector("#restartButton");
 let colorDivs = document.querySelectorAll('.cellDiv');
-
-// colorDivs.forEach((cellDiv) => {
-    
-//     console.log("click");
-//     cellDiv.addEventListener("click", () =>{
-//         cellDiv.style.backgroundColor = "black";
-//         console.log("click");
-//     });
-// });
 
 
 startBtn.addEventListener("click", () =>{
     createGrid(); 
+});
+
+restartBtn.addEventListener("click", () =>{
+    clearGrid(); 
 });
 
 function createGrid(){
@@ -53,3 +49,10 @@ function createGrid(){
     });
 }
 
+function clearGrid(){
+    let colorDivs = document.querySelectorAll('.cellDiv');
+    colorDivs.forEach((cellDiv) => {
+        console.log("abs");
+        cellDiv.remove();
+    });
+}
