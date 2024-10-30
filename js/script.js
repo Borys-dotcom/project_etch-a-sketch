@@ -6,7 +6,13 @@ let colorDivs = document.querySelectorAll('.cellDiv');
 
 
 startBtn.addEventListener("click", () =>{
-    createGrid(); 
+
+    if ((Math.floor(Number(size.value)) !== Number(size.value)) || 
+        Number(size.value) <= 0){
+            alert("Enter correct value of grid size!");
+        }
+    else createGrid(); 
+
 });
 
 restartBtn.addEventListener("click", () =>{
@@ -32,8 +38,11 @@ function createGrid(){
             cellDiv.classList.add("cellDiv");
             cellDiv.style.height = `${cellWidth}px`;
             cellDiv.style.width = `${cellHeight}px`;
-            cellDiv.style.backgroundColor = "black";
-            cellDiv.style.opacity = 0;
+
+            cellDiv.style.backgroundColor = undefined;
+            // cellDiv.style.backgroundColor = "black";
+            // cellDiv.style.opacity = 0;
+            
             rowDiv.appendChild(cellDiv);
         }
     }
@@ -42,9 +51,19 @@ function createGrid(){
     colorDivs.forEach((cellDiv) => {
         
         cellDiv.addEventListener("mouseover", () =>{
-            let opacityTemp = Number(cellDiv.style.opacity);
-            opacityTemp += 0.1;
-            cellDiv.style.opacity = opacityTemp;
+            console.log(cellDiv.style.backgroundColor);
+            if (cellDiv.style.backgroundColor === ""){
+                let colorRed = Math.floor(Math.random()*255);
+                let colorGreen = Math.floor(Math.random()*255);
+                let colorBlue = Math.floor(Math.random()*255);
+                cellDiv.style.backgroundColor = `rgb(${colorRed}, ${colorGreen}, ${colorBlue})`;
+                cellDiv.style.opacity = 1;
+            }
+
+
+            // let opacityTemp = Number(cellDiv.style.opacity);
+            // opacityTemp += 0.1;
+            // cellDiv.style.opacity = opacityTemp;
         });
     });
 }
@@ -52,7 +71,6 @@ function createGrid(){
 function clearGrid(){
     let colorDivs = document.querySelectorAll('.cellDiv');
     colorDivs.forEach((cellDiv) => {
-        console.log("abs");
         cellDiv.remove();
     });
 }
