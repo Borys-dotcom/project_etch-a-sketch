@@ -3,19 +3,55 @@ let size = document.getElementById('inputSize');
 let startBtn = document.querySelector("#startButton");
 let restartBtn = document.querySelector("#restartButton");
 let colorDivs = document.querySelectorAll('.cellDiv');
-
+let colouringType = document.getElementsByName('typeOfColouring');
+let selectedType = "";
+let choiceTypeOpacity = document.getElementById('typeOpacity');
+let choiceTypeColor = document.getElementById('typeColor');
 
 startBtn.addEventListener("click", () =>{
 
-    if ((Math.floor(Number(size.value)) !== Number(size.value)) || 
-        Number(size.value) <= 0){
-            alert("Enter correct value of grid size!");
+    if (selectedType === ""){
+
+            for (i=0; i<colouringType.length; i++){
+                if (colouringType[i].checked){
+                    selectedType = colouringType[i].value;
+                    console.log(selectedType);
+                }
+            }
+            if (selectedType === ""){
+                alert("Choose corect type of game!");
+            }
+
+        else {
+
+            if ((Math.floor(Number(size.value)) !== Number(size.value)) || 
+                Number(size.value) <= 0){
+                    alert("Enter correct value of grid size!");
+                    selectedType = "";
+                }
+            else{
+                createGrid();
+                choiceTypeOpacity.disabled = true;
+                choiceTypeColor.disabled = true;
+                size.disabled = true;
+            } 
         }
-    else createGrid(); 
+    }
+    else alert('First you have to finish present game!');
 
 });
 
 restartBtn.addEventListener("click", () =>{
+    selectedType = "";
+    size.value = "";
+    choiceTypeOpacity.disabled = false;
+    choiceTypeColor.disabled = false;
+    size.disabled = false;
+
+    for (i=0; i<colouringType.length; i++){
+        colouringType[i].checked = false;    
+    }
+
     clearGrid(); 
 });
 
@@ -39,9 +75,14 @@ function createGrid(){
             cellDiv.style.height = `${cellWidth}px`;
             cellDiv.style.width = `${cellHeight}px`;
 
-            cellDiv.style.backgroundColor = undefined;
-            // cellDiv.style.backgroundColor = "black";
-            // cellDiv.style.opacity = 0;
+            if (selectedType === "color"){
+                cellDiv.style.backgroundColor = undefined;
+            }
+
+            if (selectedType === "opacity"){
+                cellDiv.style.backgroundColor = "black";
+                cellDiv.style.opacity = 0;
+            }
             
             rowDiv.appendChild(cellDiv);
         }
@@ -51,19 +92,21 @@ function createGrid(){
     colorDivs.forEach((cellDiv) => {
         
         cellDiv.addEventListener("mouseover", () =>{
-            console.log(cellDiv.style.backgroundColor);
-            if (cellDiv.style.backgroundColor === ""){
-                let colorRed = Math.floor(Math.random()*255);
-                let colorGreen = Math.floor(Math.random()*255);
-                let colorBlue = Math.floor(Math.random()*255);
-                cellDiv.style.backgroundColor = `rgb(${colorRed}, ${colorGreen}, ${colorBlue})`;
-                cellDiv.style.opacity = 1;
+            
+            if (selectedType === "color"){
+                if (cellDiv.style.backgroundColor === ""){
+                    let colorRed = Math.floor(Math.random()*255);
+                    let colorGreen = Math.floor(Math.random()*255);
+                    let colorBlue = Math.floor(Math.random()*255);
+                    cellDiv.style.backgroundColor = `rgb(${colorRed}, ${colorGreen}, ${colorBlue})`;
+                    cellDiv.style.opacity = 1;
+                }
             }
-
-
-            // let opacityTemp = Number(cellDiv.style.opacity);
-            // opacityTemp += 0.1;
-            // cellDiv.style.opacity = opacityTemp;
+            if (selectedType === "opacity"){
+                let opacityTemp = Number(cellDiv.style.opacity);
+                opacityTemp += 0.1;
+                cellDiv.style.opacity = opacityTemp;
+            }
         });
     });
 }
